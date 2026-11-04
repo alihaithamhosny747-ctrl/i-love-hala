@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Love Lola ❤️</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a000d 0%, #4a0028 50%, #0d0007 100%);
+            color: #ffffff;
+            font-family: 'Cairo', Tahoma, sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 450px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 2px solid #ff2a75;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 0 25px rgba(255, 42, 117, 0.4);
+            text-align: center;
+        }
+        h1, h2 { color: #ff6699; }
+        .atm-screen {
+            background: #000;
+            border: 2px solid #ff2a75;
+            color: #ff2a75;
+            font-size: 32px;
+            letter-spacing: 5px;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            min-height: 50px;
+        }
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+        .key-btn {
+            background-color: #ff2a75;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            border: none;
+            padding: 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .key-btn:hover { background-color: #ff6699; }
+        .action-btn {
+            background-color: #ff1493;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-top: 15px;
+            width: 100%;
+        }
+        .action-btn:hover { background-color: #ff6699; }
+        .hidden { display: none; }
+        .gallery-img {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 2px solid #ff2a75;
+            margin-bottom: 10px;
+        }
+        .card {
+            background: #000;
+            border: 2px solid #ff2a75;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .error-msg { color: #ff4b4b; font-weight: bold; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- الخطوة 1: شاشة الـ ATM -->
+    <div id="atm-section">
+        <h1>For My Love Lola ❤️</h1>
+        <p>ادخلي كلمة المرور عبر آلة الـ ATM 💳</p>
+        <div class="atm-screen" id="display">____</div>
+        <div class="keypad">
+            <button class="key-btn" onclick="pressKey('1')">1</button>
+            <button class="key-btn" onclick="pressKey('2')">2</button>
+            <button class="key-btn" onclick="pressKey('3')">3</button>
+            <button class="key-btn" onclick="pressKey('4')">4</button>
+            <button class="key-btn" onclick="pressKey('5')">5</button>
+            <button class="key-btn" onclick="pressKey('6')">6</button>
+            <button class="key-btn" onclick="pressKey('7')">7</button>
+            <button class="key-btn" onclick="pressKey('8')">8</button>
+            <button class="key-btn" onclick="pressKey('9')">9</button>
+            <button class="key-btn" onclick="pressKey('/')">/</button>
+            <button class="key-btn" onclick="pressKey('0')">0</button>
+            <button class="key-btn" onclick="clearPin()" style="background-color:#444;">❌</button>
+        </div>
+        <button class="action-btn" onclick="checkPin()">🔓 دخول</button>
+        <div id="pin-error" class="error-msg"></div>
+    </div>
+
+    <!-- الخطوة 2: سؤال الدلع الأول -->
+    <div id="quiz-1" class="hidden">
+        <h2>سؤال أمان مهم جداً لـ لولا 🤔</h2>
+        <p style="font-size: 20px;">بتعزي كتكوتك قد ايه؟ 🐣</p>
+        <button class="action-btn" onclick="wrongAnswer()">بحبه أوي ❤️</button>
+        <button class="action-btn" onclick="nextQuiz(2)" style="background-color: #28a745;">بموت فيه 🔥</button>
+        <div id="quiz1-error" class="error-msg"></div>
+    </div>
+
+    <!-- الخطوة 3: سؤال الدلع الثاني -->
+    <div id="quiz-2" class="hidden">
+        <h2>سؤال أخير وتدخلي على المفاجأة 💖</h2>
+        <p style="font-size: 20px;">بتموتي فيه قد ايه؟ 👑</p>
+        <button class="action-btn" onclick="wrongAnswer2()">حاجة بسيطة 🤏</button>
+        <button class="action-btn" onclick="showSurprise()" style="background-color: #28a745;">بموت فيه قد الدنيا كلها 🌍</button>
+        <div id="quiz2-error" class="error-msg"></div>
+    </div>
+
+    <!-- الخطوة 4: معرض الصور والمفاجأة -->
+    <div id="surprise-section" class="hidden">
+        <h1 style="color: #ff6699;">أهلاً بكِ يا أجمل لولا في الدنيا! ✨💖</h1>
+        <hr style="border-color: #ff2a75;">
+
+        <div id="gallery">
+            <!-- الصورة 1 -->
+            <img src="IMG-20261104-WA0045.jpg" class="gallery-img" alt="1">
+            <h4 style="color: #fff;">The reason behind my every smile. You make ordinary days feel like magic.</h4>
+            <hr style="border-color: #444;">
+
+            <!-- الصورة 2 -->
+            <img src="IMG-20261104-WA0046.jpg" class="gallery-img" alt="2">
+            <h4 style="color: #fff;">معاكِ حسيت إن الدنيا لسه بخير وإن السعادة ممكن تكون في ضحكة.</h4>
+            <hr style="border-color: #444;">
+
+            <!-- الصورة 3 -->
+            <img src="IMG-20261104-WA0047.jpg" class="gallery-img" alt="3">
+            <h4 style="color: #fff;">أجمل صدفة دخلت حياتي وغيرت كل ملامحها للأحلى.</h4>
+            <hr style="border-color: #444;">
+
+            <!-- الصورة 4 -->
+            <img src="IMG-20261104-WA0053.jpg" class="gallery-img" alt="4">
+            <h4 style="color: #fff;">وجودك جنبي بيدي لكل حاجة معنى وطعم تاني خالص.</h4>
+            <hr style="border-color: #444;">
+
+            <!-- الصورة 5 -->
+            <img src="IMG-20261104-WA0057.jpg" class="gallery-img" alt="5">
+            <h4 style="color: #fff;">أنتِ مش بس شخص بحبه، أنتِ بيتي وأماني وكل دنيتي.</h4>
+            <hr style="border-color: #444;">
+
+            <!-- الصورة 6 -->
+            <img src="IMG-20261104-WA0058.jpg" class="gallery-img" alt="6">
+            <h4 style="color: #fff;">مهما الكلام كتر ووصف، مش هيقدر يوفيكِ حقك من الحب.</h4>
+            <hr style="border-color: #444;">
+
+            <!-- الصورة 7 -->
+            <img src="IMG-20261104-WA0059.jpg" class="gallery-img" alt="7">
+            <h4 style="color: #fff;">ضحكتك دي هي النور اللي بينور لي كل طريق ضلمة.</h4>
+        </div>
+
+        <!-- رسالة النهاية الخاصة بلولا -->
+        <div class="card">
+            <h2 style="color: #ff2a75;">يا أحلى لولا في المجرة كلها 👑❤️</h2>
+            <p style="color: #ffffff; font-size: 18px; line-height: 1.8;">
+                عايز أقولك إنك مش بس حبيبتي، أنتِ ضحكتي وأماني وكل حاجة حلوة في يومي.<br>
+                وجودك جنبي بيخلي كل صعبة تهون، وضحكتك بتسوى الدنيا وما فيها.<br>
+                ربنا يديمك في حياتي يا أجمل نسيج في قلبي، وهفضل أحبك وبموت فيكِ لحد آخر يوم في عمري! 💖✨
+            </p>
+            <h3 style="color: #ffffff;">كتكوتك بيحبك أوي! 🐣💌</h3>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentPin = "";
+    const correctPin = "9/10/2026";
+    const correctPinAlternative = "9102026";
+
+    function pressKey(num) {
+        if (currentPin.length < 10) {
+            currentPin += num;
+            updateDisplay();
+        }
+    }
+
+    function clearPin() {
+        currentPin = "";
+        updateDisplay();
+    }
+
+    function updateDisplay() {
+        document.getElementById("display").innerText = currentPin ? currentPin : "____";
+    }
+
+    function checkPin() {
+        if (currentPin === correctPin || currentPin === correctPinAlternative) {
+            document.getElementById("atm-section").classList.add("hidden");
+            document.getElementById("quiz-1").classList.remove("hidden");
+        } else {
+            document.getElementById("pin-error").innerText = "الباسورد مش مظبوط يا لولا! جربي تاني ❤️";
+            currentPin = "";
+            updateDisplay();
+        }
+    }
+
+    function wrongAnswer() {
+        document.getElementById("quiz1-error").innerText = "تُؤ تؤ.. مش كفاية يا لولا! 😜 جربي تاني!";
+    }
+
+    function nextQuiz(step) {
+        if (step === 2) {
+            document.getElementById("quiz-1").classList.add("hidden");
+            document.getElementById("quiz-2").classList.remove("hidden");
+        }
+    }
+
+    function wrongAnswer2() {
+        document.getElementById("quiz2-error").innerText = "مفيش حاجة اسمها بسيطة! لازم تعترفي بتموتي فيه قد إيه 😉";
+    }
+
+    function showSurprise() {
+        document.getElementById("quiz-2").classList.add("hidden");
+        document.getElementById("surprise-section").classList.remove("hidden");
+    }
+</script>
+
+</body>
+</html>
